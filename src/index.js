@@ -1,6 +1,4 @@
-window.PCC = window.PCC || {};
-window.PCC.RichText = window.PCC.RichText || {};
-
+import './namespace.js';
 import './config.js';
 import './fields.js';
 import './loader.js';
