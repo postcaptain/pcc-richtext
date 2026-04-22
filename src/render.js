@@ -1,5 +1,23 @@
 const RichText = window.PCC.RichText;
 
+RichText.ensureRenderStyles = function () {
+	if (document.getElementById('pcc-richtext-render-styles')) {
+		return;
+	}
+
+	const style = document.createElement('style');
+	style.id = 'pcc-richtext-render-styles';
+	style.textContent = `
+		.generated-content {
+			padding: 4px 8px;
+			min-height: 50px;
+			font-size: 16px;
+		}
+	`;
+
+	document.head.appendChild(style);
+};
+
 RichText.renderResponses = function (fields, options) {
 	if (!Array.isArray(fields)) {
 		console.warn('PCC.RichText.renderResponses expected an array of fields.');
@@ -8,8 +26,13 @@ RichText.renderResponses = function (fields, options) {
 
 	const settings = Object.assign({
 		renderClass: 'generated-content',
-		clearOriginal: true
+		clearOriginal: true,
+		injectStyles: true
 	}, options || {});
+
+	if (settings.injectStyles) {
+		RichText.ensureRenderStyles();
+	}
 
 	fields.forEach(function (field) {
 		if (!field || !field.export) {
