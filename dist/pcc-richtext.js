@@ -36,36 +36,31 @@
   };
 
   // src/loader.js
-  (function(window2) {
-    "use strict";
-    window2.PCC = window2.PCC || {};
-    window2.PCC.RichText = window2.PCC.RichText || {};
-    const RichText3 = window2.PCC.RichText;
-    RichText3.ensureCkeditor = function(callback) {
-      if (window2.CKEDITOR) {
-        callback();
-        return;
-      }
-      if (window2.FW && typeof FW.Require === "function") {
-        FW.Require("ckeditor.js?v=" + FW.Version, callback);
-        return;
-      }
-      console.error("PCC.RichText could not load CKEditor. FW.Require is unavailable.");
-    };
-  })(window);
+  var RichText3 = window.PCC.RichText;
+  RichText3.ensureCkeditor = function(callback) {
+    if (window.CKEDITOR) {
+      callback();
+      return;
+    }
+    if (window.FW && typeof FW.Require === "function") {
+      FW.Require("ckeditor.js?v=" + FW.Version, callback);
+      return;
+    }
+    console.error("PCC.RichText could not load CKEditor. FW.Require is unavailable.");
+  };
 
   // src/editor.js
   (function(window2, document2) {
     "use strict";
     window2.PCC = window2.PCC || {};
     window2.PCC.RichText = window2.PCC.RichText || {};
-    const RichText3 = window2.PCC.RichText;
-    RichText3.attachField = function(field) {
+    const RichText4 = window2.PCC.RichText;
+    RichText4.attachField = function(field) {
       if (!field || !field.export) {
         console.warn("PCC.RichText.attachField skipped invalid field config:", field);
         return;
       }
-      const fieldId = RichText3.getFieldIdFromExport(field.export);
+      const fieldId = RichText4.getFieldIdFromExport(field.export);
       if (!fieldId) {
         console.warn(`PCC.RichText could not find field for export "${field.export}"`);
         return;
@@ -78,16 +73,16 @@
       if (window2.CKEDITOR && CKEDITOR.instances && CKEDITOR.instances[fieldId]) {
         CKEDITOR.remove(CKEDITOR.instances[fieldId]);
       }
-      CKEDITOR.replace(fieldId, RichText3.getEditorConfig(field));
+      CKEDITOR.replace(fieldId, RichText4.getEditorConfig(field));
     };
-    RichText3.attachFields = function(fields) {
+    RichText4.attachFields = function(fields) {
       if (!Array.isArray(fields)) {
         console.warn("PCC.RichText.attachFields expected an array.");
         return;
       }
-      RichText3.ensureCkeditor(function() {
+      RichText4.ensureCkeditor(function() {
         fields.forEach(function(field) {
-          RichText3.attachField(field);
+          RichText4.attachField(field);
         });
       });
     };
