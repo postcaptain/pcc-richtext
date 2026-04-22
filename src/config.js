@@ -8,15 +8,33 @@ RichText.defaults = {
 	fullPage: false
 };
 
+RichText.profiles = {
+	full: function () {
+		return CKEDITOR.getToolbar('full');
+	},
+	basic: function () {
+		return CKEDITOR.getToolbar('basic');
+	}
+};
+
 RichText.getEditorConfig = function (field) {
 	const config = Object.assign({}, RichText.defaults, field);
+
+	const profileFn = RichText.profiles[config.profile];
+
+	if (!profileFn) {
+		console.warn(`PCC.RichText unknown profile "${config.profile}", falling back to full`);
+	}
+	
+	const toolbar = profileFn ? profileFn() : CKEDITOR.getToolbar('full');
+
 
 	return {
 		filebrowserImageBrowseUrl: '/fw/framework/ckfinder/ckfinder.html?type=Images&connector=' + encodeURIComponent('/www/'),
 		filebrowserBrowseUrl: '/fw/framework/ckfinder/ckfinder.html?type=Documents&connector=' + encodeURIComponent('/www/'),
 		fullPage: config.fullPage,
 		height: config.height,
-		toolbar: CKEDITOR.getToolbar(config.profile),
+		toolbar: toolbar,
 
 		entities: true,
 		basicEntities: true,
