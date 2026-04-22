@@ -3,7 +3,7 @@
   window.PCC = window.PCC || {};
   window.PCC.RichText = window.PCC.RichText || {};
   var RichText = window.PCC.RichText;
-  RichText.version = __VERSION__;
+  RichText.version = "0.1.3";
   RichText.defaults = {
     profile: "full",
     height: 300,
