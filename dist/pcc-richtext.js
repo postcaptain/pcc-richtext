@@ -1,4 +1,8 @@
 (() => {
+  // src/namespace.js
+  window.PCC = window.PCC || {};
+  window.PCC.RichText = window.PCC.RichText || {};
+
   // src/config.js
   var RichText = window.PCC.RichText;
   RichText.version = "0.1.3";
@@ -80,8 +84,4 @@
       });
     });
   };
-
-  // src/index.js
-  window.PCC = window.PCC || {};
-  window.PCC.RichText = window.PCC.RichText || {};
 })();
