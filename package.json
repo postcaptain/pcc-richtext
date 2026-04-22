@@ -1,0 +1,11 @@
+{
+  "name": "pcc-richtext",
+  "private": true,
+  "version": "0.1.3",
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  },
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --format=iife --outfile=dist/pcc-richtext.js"
+  }
+}
