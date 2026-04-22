@@ -1,8 +1,18 @@
+/* PCC RichText - bundled build (manual for now) */
+
 (function (window, document) {
 	'use strict';
 
+	// ensure namespace once at top
 	window.PCC = window.PCC || {};
 	window.PCC.RichText = window.PCC.RichText || {};
+
+})(window, document);
+
+
+/* ===== config.js ===== */
+(function (window) {
+	'use strict';
 
 	const RichText = window.PCC.RichText;
 
@@ -10,8 +20,34 @@
 
 	RichText.defaults = {
 		profile: 'full',
-		height: 300
+		height: 300,
+		fullPage: false
 	};
+
+	RichText.getEditorConfig = function (field) {
+		const config = Object.assign({}, RichText.defaults, field);
+
+		return {
+			filebrowserImageBrowseUrl: '/fw/framework/ckfinder/ckfinder.html?type=Images&connector=' + encodeURIComponent('/www/'),
+			filebrowserBrowseUrl: '/fw/framework/ckfinder/ckfinder.html?type=Documents&connector=' + encodeURIComponent('/www/'),
+			fullPage: config.fullPage,
+			height: config.height,
+			toolbar: CKEDITOR.getToolbar(config.profile),
+
+			entities: true,
+			basicEntities: true,
+			entities_latin: true,
+			entities_greek: true,
+			entities_processNumerical: 'force'
+		};
+	})(window);
+
+
+/* ===== fields.js ===== */
+(function (window, document) {
+	'use strict';
+
+	const RichText = window.PCC.RichText;
 
 	RichText.getFieldIdFromExport = function (exportName) {
 		const container = document.querySelector(`div[data-export="${exportName}"]`);
@@ -23,33 +59,63 @@
 		return `form_${container.dataset.id}`;
 	};
 
+})(window, document);
+
+
+/* ===== loader.js ===== */
+(function (window) {
+	'use strict';
+
+	const RichText = window.PCC.RichText;
+
+	RichText.ensureCkeditor = function (callback) {
+		if (window.CKEDITOR) {
+			callback();
+			return;
+		}
+
+		if (window.FW && typeof FW.Require === 'function') {
+			FW.Require('ckeditor.js?v=' + FW.Version, callback);
+			return;
+		}
+
+		console.error('PCC.RichText could not load CKEditor. FW.Require is unavailable.');
+	};
+
+})(window);
+
+
+/* ===== editor.js ===== */
+(function (window, document) {
+	'use strict';
+
+	const RichText = window.PCC.RichText;
+
 	RichText.attachField = function (field) {
 		if (!field || !field.export) {
 			console.warn('PCC.RichText.attachField skipped invalid field config:', field);
 			return;
 		}
 
-		const config = Object.assign({}, RichText.defaults, field);
-		const fieldId = RichText.getFieldIdFromExport(config.export);
+		const fieldId = RichText.getFieldIdFromExport(field.export);
 
 		if (!fieldId) {
-			console.warn(`PCC.RichText could not find field for export "${config.export}"`);
+			console.warn(`PCC.RichText could not find field for export "${field.export}"`);
 			return;
 		}
 
 		const element = document.getElementById(fieldId);
 
 		if (!element) {
-			console.warn(`PCC.RichText found export "${config.export}" but not textarea "${fieldId}"`);
+			console.warn(`PCC.RichText found export "${field.export}" but not textarea "${fieldId}"`);
 			return;
 		}
 
-		console.log('PCC.RichText.attachField ready', {
-			export: config.export,
-			fieldId: fieldId,
-			profile: config.profile,
-			height: config.height
-		});
+		if (window.CKEDITOR && CKEDITOR.instances && CKEDITOR.instances[fieldId]) {
+			CKEDITOR.remove(CKEDITOR.instances[fieldId]);
+		}
+
+		CKEDITOR.replace(fieldId, RichText.getEditorConfig(field));
 	};
 
 	RichText.attachFields = function (fields) {
@@ -58,8 +124,10 @@
 			return;
 		}
 
-		fields.forEach(function (field) {
-			RichText.attachField(field);
+		RichText.ensureCkeditor(function () {
+			fields.forEach(function (field) {
+				RichText.attachField(field);
+			});
 		});
 	};
 
