@@ -24,30 +24,33 @@ A lightweight, reusable library for enhancing Slate (Technolutions) textarea fie
 
 ### ✏️ Edit Page (WYSIWYG)
 
-Paste into a Script block:
+Turn a form field into a rich text block. Paste the following into a Custom Script block:
 
 ```javascript
 $.getScript('https://cdn.jsdelivr.net/gh/postcaptain/pcc-richtext@0.2.1/dist/pcc-richtext.js')
   .done(function () {
     PCC.RichText.attachFields([
-      { export: 'sys:field:apr_notes', height: 300, profile: 'full' },
-      { export: 'sys:field:apr_summary', height: 300, profile: 'basic' }
+      { export: 'FORM FIELD 1 EXPORT KEY HERE', height: 300, profile: 'full' },
+      { export: 'FORM FIELD 2 EXPORT KEY HERE', height: 300, profile: 'basic' },
+      { export: 'FORM FIELD 3 EXPORT KEY HERE', height: 300, profile: 'basic' }
     ]);
   });
   ````
 
 ### 👀 View Page (Render HTML)
 
-Paste into a Script block:
+When viewing a form (like on a custom tab) that has saved html, turn it back into displayed content. Paste the following into an Instructions block on the form:
 
-```javascript
+```html
+<script>
 $.getScript('https://cdn.jsdelivr.net/gh/postcaptain/pcc-richtext@0.2.1/dist/pcc-richtext.js')
   .done(function () {
     PCC.RichText.renderResponses([
-      { export: 'sys:field:apr_notes' },
-      { export: 'sys:field:apr_summary' }
+      { export: 'FORM FIELD 1 EXPORT KEY HERE' },
+      { export: 'FORM FIELD 2 EXPORT KEY HERE' }
     ]);
   });
+</script>
 ````
 
 ## 📦 Installation (CDN)
@@ -69,8 +72,8 @@ Call `PCC.RichText.attachFields()` with a list of Slate fields.
 
 ````javascript
 PCC.RichText.attachFields([
-  { export: 'sys:field:apr_notes', height: 300, profile: 'full' },
-  { export: 'sys:field:apr_summary', height: 300, profile: 'basic' }
+  { export: 'FORM FIELD 1 EXPORT KEY', height: 300, profile: 'full' },
+  { export: 'FORM FIELD 2 EXPORT KEY', height: 300, profile: 'basic' }
 ]);
 ````
 
@@ -96,8 +99,8 @@ Call `PCC.RichText.renderResponses()` with the same field list.
 
 ````javascript
 PCC.RichText.renderResponses([
-  { export: 'sys:field:apr_notes' },
-  { export: 'sys:field:apr_summary' }
+  { export: 'FORM FIELD 1 EXPORT KEY' },
+  { export: 'FORM FIELD 2 EXPORT KEY' }
 ]);
 ````
 
