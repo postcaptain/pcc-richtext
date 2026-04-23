@@ -6,6 +6,6 @@
     "esbuild": "^0.25.0"
   },
   "scripts": {
-    "build": "node build.mjs && node build-readme.mjs"
+    "build": "node scripts/build.mjs && node scripts/build-readme.mjs"
   }
 }
