@@ -17,6 +17,22 @@
     },
     basic: function() {
       return CKEDITOR.getToolbar("basic");
+    },
+    slim: function() {
+      return [
+        {
+          name: "basicstyles",
+          items: ["Bold", "Italic", "Underline"]
+        },
+        {
+          name: "links",
+          items: ["Link", "Unlink"]
+        },
+        {
+          name: "paragraph",
+          items: ["NumberedList", "BulletedList"]
+        }
+      ];
     }
   };
   RichText.getEditorConfig = function(field) {
