@@ -88,12 +88,24 @@ Load the library from jsDelivr using a specific version:
 
 https://cdn.jsdelivr.net/gh/postcaptain/pcc-richtext@1.0.0/dist/pcc-richtext.js
 
-Always use explicit versions, not `@main`.
+We recommend always using explicit versions, not `@main`.
 
 ```javascript
 $.getScript('https://cdn.jsdelivr.net/gh/postcaptain/pcc-richtext@1.0.0/dist/pcc-richtext.js');
 ````
----
+
+### But Can I Just Use `@main`?
+
+Sure. Using `@main` will always load the latest version of PCC RichText:
+
+```javascript
+$.getScript('https://cdn.jsdelivr.net/gh/postcaptain/pcc-richtext@main/dist/pcc-richtext.js');
+```
+
+This can be convenient during development or when you want forms to automatically receive updates.
+
+However, because this library may change over time, we recommend using explicit version numbers in production so that your forms continue to use a known, tested release.
+
 
 ## ✏️ Usage — Edit Mode
 
@@ -248,20 +260,6 @@ dist/
 ````
 ---
 
-## 🏗️ Build
-
-Run:
-
-````bash
-npm install  
-npm run build  
-````
-Output:
-````
-dist/pcc-richtext.js
-````
----
-
 ## 🔁 Versioning
 
 Version is controlled in:
@@ -285,8 +283,8 @@ Use that version in the CDN URL.
 
 ### Use explicit versions
 
-Avoid using @main in production.  
-Always use a fixed version number.
+We recommend not using @main in production.  
+Use a fixed version number.
 
 ---
 
