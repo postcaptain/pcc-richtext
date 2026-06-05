@@ -1,5 +1,27 @@
 const RichText = window.PCC.RichText;
 
+RichText.addBodyCss = function (field, fieldId) {
+	if (!field || !field.bodyCss) {
+		return '';
+	}
+
+	if (typeof field.bodyCss !== 'string') {
+		console.warn('PCC.RichText bodyCss expected a string:', field);
+		return '';
+	}
+
+	const safeFieldId = fieldId.replace(/[^a-zA-Z0-9_-]/g, '-');
+	const bodyClass = `pcc-richtext-body-${safeFieldId}`;
+
+	CKEDITOR.addCss(`
+		body.${bodyClass} {
+			${field.bodyCss}
+		}
+	`);
+
+	return bodyClass;
+};
+
 RichText.attachField = function (field) {
 	if (!field || !field.export) {
 		console.warn('PCC.RichText.attachField skipped invalid field config:', field);
@@ -24,7 +46,16 @@ RichText.attachField = function (field) {
 		CKEDITOR.remove(CKEDITOR.instances[fieldId]);
 	}
 
-	CKEDITOR.replace(fieldId, RichText.getEditorConfig(field));
+	const config = RichText.getEditorConfig(field);
+	const bodyClass = RichText.addBodyCss(field, fieldId);
+
+	if (bodyClass) {
+		config.bodyClass = config.bodyClass
+			? `${config.bodyClass} ${bodyClass}`
+			: bodyClass;
+	}
+	
+	CKEDITOR.replace(fieldId, config);
 };
 
 RichText.attachFields = function (fields) {
